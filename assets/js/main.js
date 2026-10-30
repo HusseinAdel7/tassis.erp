@@ -57,27 +57,32 @@ document.addEventListener('DOMContentLoaded', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 
-  // 4. Mobile Menu Toggle
-  const mobileToggle = document.querySelector('.mobile-toggle');
-  const navLinks = document.querySelector('.nav-links');
+  // 4. Mobile Menu Dropdown Toggle & Smooth Slide
+  const mobileToggle = document.getElementById('mobileMenuBtn') || document.querySelector('.mobile-toggle');
+  const navLinks = document.getElementById('mainNavLinks') || document.querySelector('.nav-links');
   const navBackdrop = document.getElementById('mobileNavBackdrop');
 
   function openMobileMenu() {
     navLinks?.classList.add('mobile-open');
     navBackdrop?.classList.add('active');
-    if (mobileToggle) mobileToggle.innerHTML = '<i class="fa-solid fa-xmark"></i>';
-    document.body.style.overflow = 'hidden';
+    if (mobileToggle) {
+      mobileToggle.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+      mobileToggle.setAttribute('aria-expanded', 'true');
+    }
   }
 
   function closeMobileMenu() {
     navLinks?.classList.remove('mobile-open');
     navBackdrop?.classList.remove('active');
-    if (mobileToggle) mobileToggle.innerHTML = '<i class="fa-solid fa-bars"></i>';
-    document.body.style.overflow = '';
+    if (mobileToggle) {
+      mobileToggle.innerHTML = '<i class="fa-solid fa-bars"></i>';
+      mobileToggle.setAttribute('aria-expanded', 'false');
+    }
   }
 
   if (mobileToggle && navLinks) {
-    mobileToggle.addEventListener('click', () => {
+    mobileToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
       const isOpen = navLinks.classList.contains('mobile-open');
       if (isOpen) {
         closeMobileMenu();
@@ -88,34 +93,82 @@ document.addEventListener('DOMContentLoaded', () => {
 
     navBackdrop?.addEventListener('click', closeMobileMenu);
 
-    navLinks.querySelectorAll('a').forEach(a => {
-      a.addEventListener('click', () => {
+    // Close when tapping anywhere outside the header and nav links
+    document.addEventListener('click', (e) => {
+      if (navLinks.classList.contains('mobile-open')) {
+        if (!navLinks.contains(e.target) && !mobileToggle.contains(e.target)) {
+          closeMobileMenu();
+        }
+      }
+    });
+
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && navLinks.classList.contains('mobile-open')) {
         closeMobileMenu();
-      });
+      }
     });
   }
 
-  // 5. ScrollSpy & Precision Scroll for Navigation Links
+  // 5. ScrollSpy & Unified Precision Scroll for Navigation Links
   const navAnchorLinks = document.querySelectorAll('.nav-link[href^="#"], .jump-pill, a[href^="#"]:not([href="#"])');
   const trackedSections = document.querySelectorAll('section[id]');
+
+  function scrollToSection(targetId) {
+    const targetSec = document.getElementById(targetId);
+    if (!targetSec) return;
+
+    // 1. Immediately close mobile menu so screen is totally clean
+    closeMobileMenu();
+
+    // 2. Measure actual fixed header height dynamically
+    const headerEl = document.querySelector('.site-header');
+    const headerHeight = headerEl ? headerEl.offsetHeight : 76;
+
+    // 3. Smooth scroll with precision offset
+    setTimeout(() => {
+      const targetTop = targetSec.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+      window.scrollTo({
+        top: Math.max(0, targetTop),
+        behavior: 'smooth'
+      });
+    }, 20);
+
+    // 4. Update active indicator
+    navAnchorLinks.forEach(l => {
+      const h = l.getAttribute('href');
+      if (h === `#${targetId}`) {
+        l.classList.add('active');
+      } else if (h && h.startsWith('#')) {
+        l.classList.remove('active');
+      }
+    });
+  }
 
   navAnchorLinks.forEach(link => {
     link.addEventListener('click', (e) => {
       const href = link.getAttribute('href');
       if (!href || !href.startsWith('#') || href === '#') return;
-      const targetSec = document.querySelector(href);
+      const targetId = href.substring(1);
+      const targetSec = document.getElementById(targetId);
       if (targetSec) {
         e.preventDefault();
-        const headerHeight = 76;
-        const targetTop = targetSec.getBoundingClientRect().top + window.scrollY - headerHeight;
-        window.scrollTo({
-          top: Math.max(0, targetTop),
-          behavior: 'smooth'
-        });
-        history.pushState(null, '', href);
+        scrollToSection(targetId);
+        if (history.pushState) {
+          history.pushState(null, '', href);
+        }
       }
     });
   });
+
+  // Also close mobile menu if tapping non-anchor links (like WhatsApp or Call) inside the dropdown
+  if (navLinks) {
+    navLinks.querySelectorAll('a:not([href^="#"])').forEach(a => {
+      a.addEventListener('click', () => {
+        closeMobileMenu();
+      });
+    });
+  }
 
   if (navAnchorLinks.length > 0 && trackedSections.length > 0) {
     window.addEventListener('scroll', () => {
