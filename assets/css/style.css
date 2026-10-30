@@ -1772,25 +1772,35 @@ html[data-theme='dark'] .sim-report-badge {
    Real ERP Live Dashboard Simulator (#screens)
    Recreates the exact UI of Tassis ERP Dashboard with full module navigation
    -------------------------------------------------------------------------- */
+#screens .container {
+  width: 100%;
+  max-width: 100%;
+  padding-left: clamp(10px, 1.8vw, 24px);
+  padding-right: clamp(10px, 1.8vw, 24px);
+}
+
 .tdb-window {
   background: var(--bg-surface);
   border: 1px solid var(--border-color);
-  border-radius: 22px;
-  overflow: hidden;
+  border-radius: 20px;
+  overflow-x: auto;
+  overflow-y: visible;
   box-shadow: var(--shadow-float), 0 0 0 1px color-mix(in srgb, var(--primary) 25%, transparent);
   position: relative;
   margin-top: 1rem;
+  width: 100%;
+  max-width: 100%;
   transition: all var(--transition-normal);
 }
 
 .tdb-window-header {
   background: var(--mockup-header);
   border-bottom: 1px solid var(--border-color);
-  padding: 0.75rem 1.5rem;
+  padding: 0.75rem 1.25rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
+  gap: 0.75rem;
   flex-wrap: wrap;
 }
 
@@ -1817,6 +1827,7 @@ html[data-theme='dark'] .sim-report-badge {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  white-space: nowrap;
 }
 
 .tdb-window-title i {
@@ -1838,6 +1849,7 @@ html[data-theme='dark'] .sim-report-badge {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
+  white-space: nowrap;
 }
 
 .tdb-badge.readonly {
@@ -1862,18 +1874,22 @@ html[data-theme='dark'] .tdb-badge.readonly {
   flex-direction: row-reverse;
   background: var(--bg-body);
   align-items: stretch;
+  width: 100%;
+  min-width: 980px;
 }
 
 /* Authentic Dashboard Right Sidebar */
 .tdb-sidebar {
-  width: 275px;
-  min-width: 275px;
+  width: clamp(210px, 16vw, 235px);
+  min-width: 210px;
+  max-width: 240px;
+  flex-shrink: 0;
   background: var(--bg-surface);
   border-inline-start: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 1rem 0.75rem;
+  padding: 0.85rem 0.65rem;
   transition: all var(--transition-normal);
   z-index: 10;
   align-self: stretch;
@@ -2031,32 +2047,36 @@ html[data-theme='dark'] .tdb-menu-item.active {
 .tdb-topbar {
   background: var(--bg-surface);
   border-bottom: 1px solid var(--border-color);
-  padding: 0.85rem 1.75rem;
+  padding: 0.6rem 1.15rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
-  flex-wrap: wrap;
+  gap: 0.65rem;
+  flex-wrap: nowrap;
+  min-width: 0;
 }
 
 .tdb-topbar-right {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.65rem;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .tdb-welcome {
-  font-size: 1.15rem;
+  font-size: 1.05rem;
   font-weight: 900;
   color: var(--text-main);
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
 }
 
 .tdb-topbar-center {
   flex: 1;
-  max-width: 420px;
+  max-width: 300px;
+  min-width: 120px;
   position: relative;
 }
 
@@ -2171,10 +2191,11 @@ html[data-theme='dark'] .tdb-pill-btn.reports {
 
 /* Dashboard Content Stage - Fits naturally without internal scrolling */
 .tdb-stage {
-  padding: 1.25rem 1.5rem;
+  padding: 0.85rem 1.15rem;
   flex: 1;
   overflow: visible;
   min-height: auto;
+  min-width: 0;
 }
 
 .tdb-module-view {
@@ -2373,21 +2394,22 @@ html[data-theme='dark'] .tdb-card-badge {
 .tdb-topbar-controls {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  flex-wrap: wrap;
+  gap: 0.4rem;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 /* Real App Logout Button (Dark Forest / Teal pill) */
 .tdb-logout-pill-real {
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
-  padding: 0.45rem 1.05rem;
+  gap: 0.35rem;
+  padding: 0.35rem 0.8rem;
   border-radius: var(--radius-full);
   background: #0f766e;
   border: 1px solid #115e59;
   color: #ffffff;
-  font-size: 0.84rem;
+  font-size: 0.78rem;
   font-weight: 800;
   cursor: pointer;
   box-shadow: 0 2px 6px rgba(15, 118, 110, 0.25);
@@ -2403,19 +2425,19 @@ html[data-theme='dark'] .tdb-card-badge {
 .tdb-user-pill-mirror {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.25rem 0.75rem 0.25rem 0.35rem;
+  gap: 0.35rem;
+  padding: 0.2rem 0.65rem 0.2rem 0.25rem;
   border-radius: var(--radius-full);
   background: var(--bg-subtle);
   border: 1px solid var(--border-color);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 800;
   color: var(--text-main);
 }
 
 .tdb-user-pill-mirror .avatar-circle {
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   background: #059669;
   color: #ffffff;
@@ -2423,7 +2445,7 @@ html[data-theme='dark'] .tdb-card-badge {
   align-items: center;
   justify-content: center;
   font-weight: 900;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
 }
 
 /* Language Capsule Toggle */
@@ -2495,23 +2517,25 @@ html[data-theme='dark'] .tdb-card-badge {
 /* Overview Mirror 2-Column Grid Layout */
 .tdb-overview-mirror-grid {
   display: grid;
-  grid-template-columns: 1fr 310px;
-  gap: 1.25rem;
+  grid-template-columns: 1fr clamp(240px, 22vw, 275px);
+  gap: 0.85rem;
   align-items: start;
+  min-width: 0;
 }
 
 .tdb-overview-main-col {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 0.85rem;
   min-width: 0;
 }
 
 .tdb-overview-widgets-col {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 0.85rem;
   min-width: 0;
+  width: 100%;
 }
 
 /* Welcome Card (Card 1) */
@@ -2632,21 +2656,23 @@ html[data-theme='dark'] .tdb-card-badge {
 /* KPI Cards 5-Column Grid */
 .tdb-kpi-mirror-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 0.75rem;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: clamp(0.35rem, 0.5vw, 0.65rem);
 }
 
 .tdb-kpi-mirror-card {
   background: var(--bg-surface);
   border: 1px solid var(--border-color);
   border-radius: 14px;
-  padding: 0.85rem 0.5rem;
+  padding: 0.65rem 0.35rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+  min-width: 0;
+  overflow: hidden;
   transition: transform var(--transition-fast), box-shadow var(--transition-fast);
 }
 
@@ -2656,14 +2682,14 @@ html[data-theme='dark'] .tdb-card-badge {
 }
 
 .tdb-kpi-icon-box {
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.05rem;
-  margin-bottom: 0.45rem;
+  font-size: 1rem;
+  margin-bottom: 0.35rem;
 }
 
 .tdb-kpi-icon-box.green { background: #eafaf1; color: #10b981; }
@@ -2675,17 +2701,21 @@ html[data-theme='dark'] .tdb-card-badge {
 .tdb-kpi-icon-box.yellow { background: #fef3c7; color: #d97706; }
 
 .tdb-kpi-val {
-  font-size: 1.45rem;
+  font-size: clamp(1.2rem, 1.8vw, 1.55rem);
   font-weight: 900;
   color: var(--text-main);
-  line-height: 1;
-  margin-bottom: 0.25rem;
+  line-height: 1.1;
+  margin-bottom: 0.15rem;
 }
 
 .tdb-kpi-label {
-  font-size: 0.76rem;
+  font-size: clamp(0.68rem, 0.8vw, 0.78rem);
   font-weight: 750;
   color: var(--text-muted);
+  white-space: normal;
+  line-height: 1.25;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 /* Card 3: Financial Center (مركز الأداء والتحليل المالي) */
@@ -2752,18 +2782,19 @@ html[data-theme='dark'] .tdb-card-badge {
 
 .tdb-financial-metrics-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.85rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.65rem;
 }
 
 .tdb-fin-metric-box {
   background: var(--bg-subtle);
   border: 1px solid var(--border-color);
   border-radius: 12px;
-  padding: 0.85rem 1.1rem;
+  padding: 0.65rem 0.75rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  min-width: 0;
 }
 
 .tdb-fin-metric-info .lbl {
@@ -3035,23 +3066,9 @@ html[data-theme='dark'] .tdb-check-square {
   background: rgba(16, 185, 129, 0.2);
 }
 
-/* Responsive adjustments for the dashboard simulator */
-@media (max-width: 1200px) {
-  .tdb-overview-mirror-grid { grid-template-columns: 1fr; }
+/* Dashboard simulator fine-tuning for large displays */
+@media (max-width: 1400px) {
   .tdb-reports-grid-9 { grid-template-columns: repeat(2, 1fr); }
-  .tdb-kpi-grid { grid-template-columns: repeat(2, 1fr); }
-  .tdb-kpi-mirror-grid { grid-template-columns: repeat(3, 1fr); }
-}
-
-@media (max-width: 900px) {
-  .tdb-layout { flex-direction: column; }
-  .tdb-sidebar { width: 100%; min-width: 100%; border-inline-start: none; border-bottom: 1px solid var(--border-color); }
-  .tdb-reports-grid-9 { grid-template-columns: 1fr; }
-  .tdb-kpi-grid { grid-template-columns: 1fr; }
-  .tdb-kpi-mirror-grid { grid-template-columns: repeat(2, 1fr); }
-  .tdb-financial-metrics-grid { grid-template-columns: 1fr; }
-  .tdb-topbar { flex-direction: column; align-items: stretch; }
-  .tdb-topbar-center { max-width: 100%; }
 }
 
 /* --------------------------------------------------------------------------
@@ -3671,41 +3688,20 @@ html[data-theme='dark'] .tdb-check-square {
   inset-inline-end: calc(20px + var(--safe-right));
 }
 
-@media (max-width: 1400px) {
-  .nav-links { gap: 1rem; }
-  .nav-link { font-size: 0.88rem; padding: 0.35rem 0.25rem; }
-  .tdb-kpi-mirror-grid { grid-template-columns: repeat(4, 1fr); }
-}
-
 @media (max-width: 1200px) {
   .nav-actions .btn-whatsapp { display: none; }
-  .tdb-overview-mirror-grid { grid-template-columns: 1fr; }
   .tdb-reports-grid-9 { grid-template-columns: repeat(2, 1fr); }
-  .tdb-kpi-grid { grid-template-columns: repeat(2, 1fr); }
-  .tdb-kpi-mirror-grid { grid-template-columns: repeat(3, 1fr); }
 }
 
 /* Tablets & Small Laptops (iPad Pro, iPad Air, Surface) */
 @media (max-width: 1024px) {
-  .hero-title { font-size: 2.35rem; }
-  .hero-subtitle { font-size: 1.05rem; }
+  .hero-title { font-size: 2.2rem; }
+  .hero-subtitle { font-size: 1rem; }
   .showcase-grid { grid-template-columns: 1fr; gap: 2rem; }
   .sectors-grid { grid-template-columns: repeat(2, 1fr); gap: 1.25rem; }
   .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
   .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
   .floating-badge-card { display: none; }
-  .tdb-layout { flex-direction: column; }
-  .tdb-sidebar {
-    width: 100%;
-    min-width: 100%;
-    border-inline-start: none;
-    border-bottom: 1px solid var(--border-color);
-  }
-  .tdb-menu-list {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.35rem;
-  }
 }
 
 /* Mobile Navigation Drawer & Backdrop */
@@ -3772,7 +3768,9 @@ html[data-theme='dark'] .tdb-check-square {
 .sim-device-switcher-wrap {
   display: flex;
   justify-content: center;
-  margin-bottom: 1.75rem;
+  margin-bottom: 1.5rem;
+  padding: 0 0.5rem;
+  width: 100%;
 }
 
 .sim-device-switcher {
@@ -3780,24 +3778,26 @@ html[data-theme='dark'] .tdb-check-square {
   align-items: center;
   background: var(--bg-surface);
   border: 1px solid var(--border-color);
-  padding: 0.35rem;
+  padding: 0.25rem;
   border-radius: var(--radius-full);
   box-shadow: var(--shadow-sm);
-  gap: 0.35rem;
+  gap: 0.25rem;
+  max-width: 100%;
 }
 
 .sim-device-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.55rem;
-  padding: 0.6rem 1.35rem;
+  gap: 0.45rem;
+  padding: 0.48rem 1.15rem;
   border-radius: var(--radius-full);
-  font-size: 0.88rem;
+  font-size: 0.84rem;
   font-weight: 850;
   color: var(--text-muted);
   background: transparent;
   border: none;
   cursor: pointer;
+  white-space: nowrap;
   transition: all var(--transition-fast);
 }
 
@@ -4356,39 +4356,40 @@ html[data-theme='dark'] .tdb-phone-shell {
 /* Financial Performance Grid */
 .phone-fin-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.45rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.35rem;
 }
 
 .phone-fin-box {
   background: var(--bg-subtle);
   border: 1px solid var(--border-color);
   border-radius: 10px;
-  padding: 0.55rem 0.4rem;
+  padding: 0.45rem 0.25rem;
   text-align: center;
-  position: relative;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .phone-fin-box .lbl {
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   color: var(--text-muted);
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.15rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .phone-fin-box .val {
-  font-size: 0.85rem;
-  font-weight: 900;
+  font-size: 0.78rem;
+  font-weight: 850;
+  white-space: nowrap;
 }
 
 .phone-fin-box .val.green { color: #10b981; }
 .phone-fin-box .val.red { color: #ef4444; }
 
 .phone-fin-box .icon-fin {
-  font-size: 0.65rem;
-  position: absolute;
-  top: 6px;
-  left: 6px;
-  opacity: 0.6;
+  display: none;
 }
 
 /* Efficiency Progress Bars */
@@ -4995,21 +4996,43 @@ html[data-theme='dark'] .tdb-phone-shell {
 
   .phone-quick-actions-bar {
     grid-template-columns: repeat(2, 1fr);
-    gap: 0.5rem;
+    gap: 0.4rem;
   }
 
   .phone-action-btn {
-    padding: 0.65rem 0.5rem;
-    font-size: 0.75rem;
+    padding: 0.55rem 0.4rem;
+    font-size: 0.72rem;
   }
 
   .phone-kpi-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 0.5rem;
+    gap: 0.4rem;
   }
 
   .phone-clock-text {
-    font-size: 1.45rem;
+    font-size: 1.35rem;
+  }
+
+  .sim-device-switcher {
+    width: 100%;
+    max-width: 310px;
+    padding: 2px;
+  }
+
+  .sim-device-btn {
+    flex: 1;
+    padding: 0.42rem 0.4rem;
+    font-size: 0.76rem;
+  }
+
+  .tdb-phone-stage {
+    padding: 0.55rem;
+    gap: 0.55rem;
+  }
+
+  .phone-welcome-banner,
+  .phone-card-widget {
+    padding: 0.75rem 0.65rem;
   }
 
   .float-btn {
