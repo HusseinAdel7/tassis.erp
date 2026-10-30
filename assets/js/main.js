@@ -60,27 +60,38 @@ document.addEventListener('DOMContentLoaded', () => {
   // 4. Mobile Menu Toggle
   const mobileToggle = document.querySelector('.mobile-toggle');
   const navLinks = document.querySelector('.nav-links');
+  const navBackdrop = document.getElementById('mobileNavBackdrop');
+
+  function openMobileMenu() {
+    navLinks?.classList.add('mobile-open');
+    navBackdrop?.classList.add('active');
+    if (mobileToggle) mobileToggle.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeMobileMenu() {
+    navLinks?.classList.remove('mobile-open');
+    navBackdrop?.classList.remove('active');
+    if (mobileToggle) mobileToggle.innerHTML = '<i class="fa-solid fa-bars"></i>';
+    document.body.style.overflow = '';
+  }
+
   if (mobileToggle && navLinks) {
     mobileToggle.addEventListener('click', () => {
       const isOpen = navLinks.classList.contains('mobile-open');
       if (isOpen) {
-        navLinks.classList.remove('mobile-open');
-        navLinks.style.display = 'none';
-        mobileToggle.innerHTML = '<i class="fa-solid fa-bars"></i>';
+        closeMobileMenu();
       } else {
-        navLinks.classList.add('mobile-open');
-        navLinks.style.display = 'flex';
-        navLinks.style.flexDirection = 'column';
-        navLinks.style.position = 'absolute';
-        navLinks.style.top = '80px';
-        navLinks.style.insetInlineStart = '0';
-        navLinks.style.insetInlineEnd = '0';
-        navLinks.style.background = 'var(--bg-surface)';
-        navLinks.style.padding = '1.75rem';
-        navLinks.style.boxShadow = 'var(--shadow-lg)';
-        navLinks.style.borderBottom = '1px solid var(--border-color)';
-        mobileToggle.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+        openMobileMenu();
       }
+    });
+
+    navBackdrop?.addEventListener('click', closeMobileMenu);
+
+    navLinks.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => {
+        closeMobileMenu();
+      });
     });
   }
 
@@ -511,5 +522,161 @@ document.addEventListener('DOMContentLoaded', () => {
 
     tdbThemeToggle?.addEventListener('click', toggleAppTheme);
     tdbSidebarModeBtn?.addEventListener('click', toggleAppTheme);
+
+    // 11. Simulator Device Switcher (Desktop Web ERP vs Native Mobile App)
+    const btnSwitchDesktop = document.getElementById('btnSwitchDesktop');
+    const btnSwitchMobile = document.getElementById('btnSwitchMobile');
+    const erpDesktopSim = document.getElementById('erpSimulator');
+    const erpMobileSim = document.getElementById('erpMobileSimulator');
+
+    function setSimDevice(device) {
+      if (device === 'mobile') {
+        btnSwitchMobile?.classList.add('active');
+        btnSwitchDesktop?.classList.remove('active');
+        erpDesktopSim?.classList.add('force-hide');
+        erpMobileSim?.classList.add('force-show');
+      } else {
+        btnSwitchDesktop?.classList.add('active');
+        btnSwitchMobile?.classList.remove('active');
+        erpDesktopSim?.classList.remove('force-hide');
+        erpMobileSim?.classList.remove('force-show');
+      }
+    }
+
+    btnSwitchDesktop?.addEventListener('click', () => setSimDevice('desktop'));
+    btnSwitchMobile?.addEventListener('click', () => setSimDevice('mobile'));
+
+    // 12. Mobile Phone Simulator Interactivity
+    const phoneTabBtns = document.querySelectorAll('.phone-tab-btn');
+    const phoneNavBtns = document.querySelectorAll('.phone-nav-btn');
+    const phonePanes = document.querySelectorAll('.phone-view-pane');
+
+    function switchPhoneModule(targetId) {
+      phoneTabBtns.forEach(btn => {
+        if (btn.getAttribute('data-phone-tab') === targetId) {
+          btn.classList.add('active');
+          btn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+
+      phoneNavBtns.forEach(btn => {
+        if (btn.getAttribute('data-phone-pane') === targetId) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+
+      phonePanes.forEach(pane => {
+        if (pane.id === `phone-pane-${targetId}`) {
+          pane.classList.add('active');
+        } else {
+          pane.classList.remove('active');
+        }
+      });
+    }
+
+    phoneTabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tab = btn.getAttribute('data-phone-tab');
+        if (tab) switchPhoneModule(tab);
+      });
+    });
+
+    phoneNavBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const pane = btn.getAttribute('data-phone-pane');
+        if (pane) switchPhoneModule(pane);
+      });
+    });
+
+    // Mobile Report Preview click
+    document.querySelectorAll('.js-phone-report-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const title = card.getAttribute('data-title') || 'تقرير المنظومة';
+        const amount = card.getAttribute('data-amount') || '142,500.00 ر.س';
+        if (typeof openSimModal === 'function') {
+          openSimModal(`
+            <div style="text-align: right;">
+              <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem;">
+                <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(16, 185, 129, 0.15); color: #10b981; display: flex; align-items: center; justify-content: center; font-size: 1.35rem;">
+                  <i class="fa-solid fa-chart-pie"></i>
+                </div>
+                <div>
+                  <h3 style="font-size: 1.15rem; font-weight: 900; color: var(--text-main); margin: 0;">${title}</h3>
+                  <span style="font-size: 0.76rem; color: var(--primary); font-weight: 800;">تأسيس ERP — مركز التقارير الموحد</span>
+                </div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr; gap: 0.75rem; margin-bottom: 1.25rem;">
+                <div style="background: var(--bg-subtle); padding: 0.85rem; border-radius: 12px; border: 1px solid var(--border-color);">
+                  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.2rem;">إجمالي الحركة المالية المسجلة</div>
+                  <div style="font-size: 1.25rem; font-weight: 900; color: var(--primary);">${amount}</div>
+                </div>
+                <div style="background: var(--bg-subtle); padding: 0.85rem; border-radius: 12px; border: 1px solid var(--border-color);">
+                  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.2rem;">حالة المطابقة والترحيل</div>
+                  <div style="font-size: 1rem; font-weight: 850; color: #10b981;">متطابق ومرحل آلياً 100%</div>
+                </div>
+              </div>
+
+              <div style="background: var(--bg-subtle); border-radius: 12px; padding: 0.85rem; margin-bottom: 1.25rem; font-size: 0.82rem; border: 1px solid var(--border-color); line-height: 1.6;">
+                <div style="font-weight: 800; color: var(--text-main); margin-bottom: 0.35rem;">تفاصيل السجلات:</div>
+                <div style="color: var(--text-muted);">
+                  • فلترة فورية حسب التاريخ، الوردية، والفرع.<br />
+                  • توليد تلقائي للقيود المحاسبية المقابلة.<br />
+                  • تصدير فوري إلى Excel أو PDF.
+                </div>
+              </div>
+
+              <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+                <button type="button" class="sim-action-btn primary" onclick="document.getElementById('simModalOverlay').classList.remove('open');">
+                  <i class="fa-solid fa-check"></i> إغلاق
+                </button>
+              </div>
+            </div>
+          `);
+        }
+      });
+    });
+
+    // Sync phone live clock & date
+    function updatePhoneClock() {
+      const phoneClockEl = document.getElementById('phoneLiveClock');
+      const phoneCardClockEl = document.getElementById('phoneCardClock');
+      const phoneLiveDateFull = document.getElementById('phoneLiveDateFull');
+      const phoneCardDate = document.getElementById('phoneCardDate');
+
+      const now = new Date();
+      let hours = now.getHours();
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const seconds = String(now.getSeconds()).padStart(2, '0');
+      const ampm = hours >= 12 ? 'م' : 'ص';
+      hours = hours % 12 || 12;
+      const hoursStr = String(hours).padStart(2, '0');
+
+      const toArabicNumerals = (str) => str.replace(/\d/g, (d) => '٠١٢٣٤٥٦٧٨٩'[d]);
+
+      if (phoneClockEl) {
+        phoneClockEl.textContent = `${toArabicNumerals(hoursStr)}:${toArabicNumerals(minutes)} ${ampm}`;
+      }
+      if (phoneCardClockEl) {
+        phoneCardClockEl.textContent = `${toArabicNumerals(hoursStr)}:${toArabicNumerals(minutes)}:${toArabicNumerals(seconds)} ${ampm}`;
+      }
+
+      const days = ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+      const months = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+      const dayName = days[now.getDay()];
+      const dayNum = now.getDate();
+      const monthName = months[now.getMonth()];
+      const year = now.getFullYear();
+
+      const fullDateStr = `${dayName}، ${toArabicNumerals(String(dayNum))} ${monthName} ${toArabicNumerals(String(year))}`;
+      if (phoneLiveDateFull) phoneLiveDateFull.textContent = fullDateStr;
+      if (phoneCardDate) phoneCardDate.textContent = fullDateStr;
+    }
+    updatePhoneClock();
+    setInterval(updatePhoneClock, 1000);
   }
 });
